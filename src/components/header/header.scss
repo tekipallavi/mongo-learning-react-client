@@ -1,0 +1,17 @@
+.header-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+        .tab-item {
+            text-transform: none;      
+            font-weight: 600; 
+            color: #111827;             
+        }
+        .tab-item.Mui-selected {
+            color: #111827;      
+        }
+        .search-login-container{
+            display: flex;
+            justify-content: flex-end;
+        }
+}

@@ -1,20 +1,50 @@
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import React from 'react';
-import {Search, AccountCircle} from '@mui/icons-material';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { setCurrentRoute } from '../../redux-slices/app-actions'; 
+import Search from '../search/search';
+import { useDispatch } from 'react-redux';
 
 const HeaderComponent = () => {
+     const [value, setValue] = React.useState(0);
+     const navigate = useNavigate();
+     const location = useLocation();
+     const dispatch = useDispatch();
+
+    React.useEffect(() => {
+        // Keep the selected tab in sync with the URL path
+        if (location.pathname.startsWith('/my-proposals')) setValue(1);
+        else if (location.pathname.startsWith('/notifications')) setValue(2);
+        else setValue(0);
+    }, [location.pathname]);
+
     function addProps(index:number) {
         return {
             id: `simple-tab-${index}`,
             'aria-controls': `simple-tabpanel-${index}`,
         };
     }
-    const [value, setValue] = React.useState(0);
-    const handleChange = (event:any, newValue:number) => {
+   
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        // update the UI immediately
         setValue(newValue);
+         switch (newValue) {
+            case 0:
+                dispatch(setCurrentRoute('/home'));
+                navigate('/home'); // Redirect to Home                
+                break;
+            case 1:
+                dispatch(setCurrentRoute('/my-proposals'));
+                navigate('/my-proposals'); // Redirect to My Proposals               
+                break;
+            case 2:
+                dispatch(setCurrentRoute('/notifications'));
+                navigate('/notifications'); // Redirect to Notifications                
+                break;
+            default:
+                break;
+        }
     };
     return (
         <div className="header-container flex place-content-between mx-4">
@@ -25,23 +55,7 @@ const HeaderComponent = () => {
                     <Tab className="text-xs! font-bold!" label="Notifications" {...addProps(2)} />
                 </Tabs>
             </div>
-            <div className="search-login-container flex items-center gap-2">                            
-                    <TextField id="outlined-basic" variant="outlined"  placeholder='Home'
-                        slotProps={{
-                            input: {
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Search />
-                                    </InputAdornment>
-                                ),
-                            },
-                            htmlInput: {                                
-                                className: 'p-1!'
-                            }
-                        }}
-                    />
-                    <AccountCircle></AccountCircle>
-            </div>
+            <Search></Search>
         </div>
     );
 }

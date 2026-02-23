@@ -11,6 +11,7 @@ const Home: React.FC = () => {
     useEffect(() => {
         console.log("into the use effect of home component");
         const fetchProjects = async () => {
+            
             const p = await getProjects(loggedInEmployeeDetails.techStack);
             setProjects(p);
             console.log('Projects for logged in employee:', p);

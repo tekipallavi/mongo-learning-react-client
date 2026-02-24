@@ -2,18 +2,20 @@
  import { useEffect, useState } from 'react';
 
  const ReactQueryComponent = () => {
-    const [data, setData] = useState([]);
-
-
-    useEffect(() => {
-       const fetchData = async () => {
-          const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-          const res = await response.json();
-          setData(res);
-          console.log(res);
-       }
-       fetchData();
-    }, [])
+   // const [data, setData] = useState([]);
+    const {data, isError, isPending} =  useQuery({
+      queryKey: ['react-query-data' ],
+      queryFn: async () => {
+         const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+         const res = await response.json();
+         return res;
+      },
+      staleTime: 1000 * 10,
+      //refetchInterval: 1000 * 5,
+    })
+    if(!isPending){
+      console.log ("data from react query");
+    }
 
     return (<div className='flex flex-col p-10'>
       {data && data.length > 0 && 
@@ -33,3 +35,5 @@
  }
 
  export default ReactQueryComponent
+
+ 
